@@ -1,0 +1,116 @@
+﻿@model ExcelImport.ViewModel.CompanyListViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+<p><br /><br /></p>
+<div class="panel panel-info" id="panelDetails">
+    <div class="panel-heading">
+        <span id="SpanExpander" class="pull-left clickable">
+            <i id="ILabel" class="glyphicon glyphicon-chevron-up" style="font-size:large;"></i>
+        </span><b class="collapse-link">Company Details</b>
+    </div>
+    <div class="panel-body" style="display: block;">
+        <div class="col-sm-3 form-group has-feedback" style="width:244px;">
+            <button type="button" class="form-control has-feedback-left btnCreate" style="color:#31708f;border-radius:4px;border-color:#31708f;" id="btnUploadExcel">Upload Excel</button>
+            <span class="fa fa-user form-control-feedback left" style="color:#31708f;" aria-hidden="true"></span>
+        </div>
+        <br /><br /><br />
+        @*@Html.Partial("~/Views/Home/CompanyList.cshtml", Model.DuplicateDataList)*@
+        <ul class="nav nav-tabs">
+            <li class="active"><a data-toggle="tab" href="#home">Valid Data <div class="huge badge bg-danger"  style="font-size:small">3</div><div class="huge badge bg-danger" style="font-size:small">3</div> </a></li>
+            <li><a data-toggle="tab" href="#menu1">Duplicate Data</a><div class="huge badge bg-danger" style="font-size:small">3</div><div class="huge badge bg-danger" style="font-size:small">3</div></li>
+            <li><a data-toggle="tab" href="#menu2">Error</a></li>
+        </ul>
+
+        <div id="myTabContent" class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+                @Html.Partial("~/Views/Home/CompanyList.cshtml", Model.ValidDataList)
+            </div>
+            <div id="menu1" class="tab-pane fade">
+                @Html.Partial("~/Views/Home/CompanyList.cshtml", Model.DuplicateDataList)
+            </div>
+            <div id="menu2" class="tab-pane fade">
+                @Html.Partial("~/Views/Home/CompanyList.cshtml", Model.ErrorDataList)
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<div class="modal fade " tabindex="-1" id="uploadExcelModal" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModal">Upload Excel</h4>
+            </div>
+            <div class="modal-body" id="uploadExcel">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnuploadExcel">OK</button>
+                <button type="button" class="btn btn-default" id=close data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade " tabindex="-1" id="EditModal" role="dialog" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title" id="myModal">Edit Comp Details</h4>
+            </div>
+            <div class="modal-body" id="editComp">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnOkEdit">OK</button>
+                <button type="button" class="btn btn-default" id=close data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#empTable').DataTable(
+            {
+                responsive: true,
+            });
+       
+    });
+            $("#btnUploadExcel").click(function () {
+                $.ajax({
+                    url: '@Url.Action("UploadExcel", "Home")',
+                    type: 'GET',
+                    datatype: 'html',
+                    success: function (res) {
+                        $('#uploadExcel').html(res);
+                        $('#uploadExcelModal').modal('show');
+                    }
+                })
+            });
+            $("#myTabContent").delegate(".editCompDetails", "click", function () {
+                var compid = $(this).attr('compId');
+                $.ajax({
+                    url: '@Url.Action("EditCompDetails", "Home")',
+                    type: 'GET',
+                    data: { compId: compid },
+                    datatype: 'html',
+                    success: function (res) {
+                        $('#editComp').html(res);
+                        $('#EditModal').modal('show');
+                    }
+                })
+            });
+</script>

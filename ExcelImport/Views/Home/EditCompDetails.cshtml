@@ -1,0 +1,100 @@
+﻿@model ExcelImport.ViewModel.CompnyDetailsViewModel
+
+<script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+
+@using (Html.BeginForm("EditCompDetails", "Home", FormMethod.Post, new { id = "frmedit" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="col-md-12">
+        <div class="row">
+            <div class="form-horizontal">
+                @*First Column*@
+                @Html.HiddenFor(model => model.CompId)
+                <div class="col-md-12">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CompName, htmlAttributes: new { @class = "control-label col-md-4 col-sm-4 col-xs-12" })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBoxFor(model => model.CompName, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CompName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.GSTIN, htmlAttributes: new { @class = "control-label col-md-4 col-sm-4 col-xs-12" })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBoxFor(model => model.GSTIN, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.GSTIN, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.StartDate, htmlAttributes: new { @class = "control-label col-md-4 col-sm-4 col-xs-12 " })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.EditorFor(model => model.StartDate, new { htmlAttributes = new { @class = "form-control datepic" } })
+                            @Html.ValidationMessageFor(model => model.StartDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EndDate, htmlAttributes: new { @class = "control-label col-md-4 col-sm-4 col-xs-12 " })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.EditorFor(model => model.EndDate, new { htmlAttributes = new { @class = "form-control datepic" } })
+                            @Html.ValidationMessageFor(model => model.EndDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TurnOverAmount, htmlAttributes: new { @class = "control-label col-md-4 col-sm-4 col-xs-12" })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBoxFor(model => model.TurnOverAmount, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.TurnOverAmount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.EmailId, htmlAttributes: new { @class = "control-label col-md-4 col-sm-4 col-xs-12" })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBoxFor(x => x.EmailId, htmlAttributes: new { @class = "form-control tags" })
+                            @Html.ValidationMessageFor(model => model.EmailId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ContactNo, htmlAttributes: new { @class = "control-label col-md-4 col-sm-4 col-xs-12" })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextBoxFor(model => model.ContactNo, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script src="~/Scripts/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+    $('.datepic').datepicker({
+        autoclose: true,
+        format: 'mm/dd/yyyy',
+    });
+    $("#btnOkEdit").click(function () {
+        var valid = $('#frmedit').valid();
+        if (valid) {
+            var modeldata = $('#frmedit').serialize();
+            $('.modal').modal('hide');
+            $.ajax(
+            {
+                url: '@Url.Action("EditCompDetails", "Home")',
+                type: 'POST',
+                data: modeldata,
+                datatype: 'Json',
+                success: function (res) {
+                    alert(res.Message);
+                    window.location.reload();
+                }
+            });
+        }
+        });
+
+</script>
+
+

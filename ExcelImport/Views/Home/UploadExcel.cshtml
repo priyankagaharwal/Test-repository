@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "UploadExcel";
+}
+
+@model ExcelImport.ViewModel.ExcelImportViewmodel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@using (Html.BeginForm("UploadExcel", "Home", FormMethod.Post, new { id = "frmuploadExcel" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="col-sm-12">
+        <div class="col-sm-6">
+            <div class="form-horizontal">
+                <p><br /></p>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Document, htmlAttributes: new { @class = "control-label col-md-4 col-sm-4 col-xs-12 " })
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        @Html.TextBoxFor(m => m.Document, htmlAttributes: new { @class = "control-label", type = "file" })
+                        @Html.ValidationMessageFor(model => model.Document, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+}
+<p><br /></p>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#btnuploadExcel").click(function () {
+            var valid = $('#frmuploadExcel').valid();
+            if (valid) {
+                $('.modal').modal('hide');
+                var modeldata = new FormData($('#frmuploadExcel').get(0));
+                    $.ajax(
+                    {
+                        url: '@Url.Action("UploadExcel", "Home")',
+                        type: 'POST',
+                        data: modeldata,
+                        processData: false,
+                        contentType: false,
+                        datatype: 'json',
+                        success: function (res) {
+                            alert(res.Message);
+                            window.location.reload();
+                        }
+                    });
+            }
+        });
+    });
+</script>
+
